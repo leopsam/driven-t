@@ -8,6 +8,9 @@ import { exclude } from '@/utils/prisma-utils';
 import { AddressEnrollment } from '@/protocols';
 */
 
+import { Ticket } from '@prisma/client';
+import { notFoundError, requestError } from '@/errors';
+//import { conflictError } from '@/errors';
 import ticketRepository from '@/repositories/ticket-repository';
 
 async function getAllTicketsByType() {
@@ -15,19 +18,55 @@ async function getAllTicketsByType() {
   return ticketsTypes;
 }
 
-async function getAllTickets() {
-  const tickets = await ticketRepository.findManyTickets();
+async function getAllTicketsFromUser(email: string) {
+  const user = await ticketRepository.findUserByEmailFromTicket(email);
+  if (!user) throw notFoundError();
+
+  const enrollment = await ticketRepository.findEnrollmentByIdFromTicket(user.id);
+  if (!enrollment) throw notFoundError();
+
+  const tickets = await ticketRepository.findManyTicketsFromUser(enrollment.id);
+  if (!tickets) throw notFoundError();
+
   return tickets;
 }
 
-function postNewTicket() {
-  const testoTeste = 'service';
-  return testoTeste;
+async function postNewTicket(ticketTypeId: number, userId: number) {
+  const user = await ticketRepository.findUserByIdFromTicket(userId);
+  if (!user) throw notFoundError();
+
+  const ticketType = await ticketRepository.findTicketTypeById(ticketTypeId);
+  if (!ticketType) throw requestError(400, 'there is no such ticket');
+
+  const enrollment = await ticketRepository.findEnrollmentByIdFromTicket(userId);
+  if (!enrollment) throw notFoundError();
+
+  const dataNewTicket: PostResultTichets = {
+    ticketTypeId: ticketTypeId,
+    enrollmentId: enrollment.id,
+    status: 'RESERVED',
+  };
+
+  const ticketCreated = await ticketRepository.createNewTicketFromUserAndType(dataNewTicket);
+
+  const responseNew = {
+    id: ticketCreated.id,
+    status: ticketCreated.status,
+    ticketTypeId: ticketCreated.ticketTypeId,
+    enrollmentId: ticketCreated.enrollmentId,
+    ticketType,
+    createdAt: ticketCreated.createdAt,
+    updatedAt: ticketCreated.updatedAt,
+  };
+
+  return responseNew;
 }
+
+export type PostResultTichets = Omit<Ticket, 'id' | 'createdAt' | 'updatedAt'>;
 
 const ticketsService = {
   getAllTicketsByType,
-  getAllTickets,
+  getAllTicketsFromUser,
   postNewTicket,
 };
 

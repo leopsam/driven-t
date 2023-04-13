@@ -9,12 +9,29 @@ export async function getTicketsByType(req: AuthenticatedRequest, res: Response)
 }
 
 export async function getTicketsByUser(req: AuthenticatedRequest, res: Response) {
-  const tickets = await ticketsService.getAllTickets();
-  return res.status(httpStatus.OK).send(tickets);
+  const { email } = req.body;
+
+  try {
+    const ticketUser = await ticketsService.getAllTicketsFromUser(email);
+    if (!ticketUser) return res.sendStatus(httpStatus.NOT_FOUND);
+    if (ticketUser.length === 0) return res.send('The user has no tickets');
+
+    return res.status(httpStatus.OK).send(ticketUser);
+  } catch {
+    return res.sendStatus(httpStatus.NOT_FOUND);
+  }
 }
 
 export async function postCreateTicket(req: AuthenticatedRequest, res: Response) {
-  //const newTicket = req.body;
-  const tickets = ticketsService.postNewTicket();
-  return res.status(httpStatus.OK).send('Cria no sistema um novo ingresso (Ticket) para o usuário. ' + tickets);
+  const { ticketTypeId } = req.body;
+  const { userId } = req; // talvez de erro
+  try {
+    const newTickets = await ticketsService.postNewTicket(ticketTypeId, userId);
+    if (!newTickets) return res.sendStatus(httpStatus.BAD_REQUEST);
+
+    return res.status(httpStatus.OK).send(newTickets);
+  } catch (e) {
+    if (e.name === 'RequestError') return res.sendStatus(httpStatus.BAD_REQUEST);
+    if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
+  }
 }
