@@ -8,14 +8,16 @@ import { exclude } from '@/utils/prisma-utils';
 import { AddressEnrollment } from '@/protocols';
 */
 
+import ticketRepository from '@/repositories/ticket-repository';
+
 async function getAllTicketsByType() {
-  const testoTeste = 'service';
-  return testoTeste;
+  const ticketsTypes = await ticketRepository.findManyTicketType();
+  return ticketsTypes;
 }
 
 async function getAllTickets() {
-  const testoTeste = 'service';
-  return testoTeste;
+  const tickets = await ticketRepository.findManyTickets();
+  return tickets;
 }
 
 function postNewTicket() {
