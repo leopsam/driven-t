@@ -24,7 +24,8 @@ export async function getTicketsByUser(req: AuthenticatedRequest, res: Response)
 
 export async function postCreateTicket(req: AuthenticatedRequest, res: Response) {
   const { ticketTypeId } = req.body;
-  const { userId } = req; // talvez de erro
+  const { userId } = req;
+
   try {
     const newTickets = await ticketsService.postNewTicket(ticketTypeId, userId);
     if (!newTickets) return res.sendStatus(httpStatus.BAD_REQUEST);

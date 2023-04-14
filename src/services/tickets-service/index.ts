@@ -10,7 +10,6 @@ import { AddressEnrollment } from '@/protocols';
 
 import { Ticket } from '@prisma/client';
 import { notFoundError, requestError } from '@/errors';
-//import { conflictError } from '@/errors';
 import ticketRepository from '@/repositories/ticket-repository';
 
 async function getAllTicketsByType() {

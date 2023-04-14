@@ -1,35 +1,45 @@
-import { Enrollment } from '@prisma/client';
 import { prisma } from '@/config';
+import { PostResultPayment } from '@/services';
 
-async function findWithAddressByUserId(userId: number) {
-  return prisma.enrollment.findFirst({
-    where: { userId },
-    include: {
-      Address: true,
+async function findTicketById(id: number) {
+  const data = await prisma.ticket.findFirst({
+    where: {
+      id,
     },
   });
+  return data;
 }
 
-async function upsert(
-  userId: number,
-  createdEnrollment: CreateEnrollmentParams,
-  updatedEnrollment: UpdateEnrollmentParams,
-) {
-  return prisma.enrollment.upsert({
+async function findPaymentByTicketId(ticketId: number) {
+  const data = await prisma.payment.findFirst({
+    where: {
+      ticketId,
+    },
+  });
+  return data;
+}
+
+async function findEnrollmentByUserId(userId: number) {
+  const data = await prisma.enrollment.findFirst({
     where: {
       userId,
     },
-    create: createdEnrollment,
-    update: updatedEnrollment,
   });
+  return data;
 }
 
-export type CreateEnrollmentParams = Omit<Enrollment, 'id' | 'createdAt' | 'updatedAt'>;
-export type UpdateEnrollmentParams = Omit<CreateEnrollmentParams, 'userId'>;
+async function createPaymentFromTicket(payment: PostResultPayment) {
+  const data = await prisma.payment.create({
+    data: payment,
+  });
+  return data;
+}
 
 const paymentRepository = {
-  findWithAddressByUserId,
-  upsert,
+  findTicketById,
+  findPaymentByTicketId,
+  findEnrollmentByUserId,
+  createPaymentFromTicket,
 };
 
 export default paymentRepository;
