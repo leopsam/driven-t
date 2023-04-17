@@ -9,16 +9,13 @@ export async function getTicketsByType(req: AuthenticatedRequest, res: Response)
 }
 
 export async function getTicketsByUser(req: AuthenticatedRequest, res: Response) {
-  const { email } = req.body;
   const { userId } = req;
 
-  console.log(userId);
-
   try {
-    const ticketUser = await ticketsService.getAllTicketsFromUser(email, userId);
+    const ticketUser = await ticketsService.getAllTicketsFromUser(userId);
     if (!ticketUser) return res.sendStatus(httpStatus.NOT_FOUND);
 
-    return res.status(httpStatus.CREATED).send(ticketUser);
+    return res.status(httpStatus.OK).send(ticketUser);
   } catch (e) {
     if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
   }

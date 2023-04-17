@@ -17,16 +17,12 @@ async function getAllTicketsByType() {
   return ticketsTypes;
 }
 
-async function getAllTicketsFromUser(email: string, userId: number) {
-  //const user = await ticketRepository.findUserByEmailFromTicket(email);
-  //if (!user) throw notFoundError();
-
+async function getAllTicketsFromUser(userId: number) {
   const enrollment = await ticketRepository.findEnrollmentByIdFromTicket(userId);
   if (!enrollment) throw notFoundError();
 
   const tickets = await ticketRepository.findManyTicketsFromUser(enrollment.id);
-  if (!tickets) throw notFoundError();
-  if (tickets.length === 0) throw notFoundError();
+  if (!tickets || tickets.length === 0) throw notFoundError();
 
   return tickets;
 }
