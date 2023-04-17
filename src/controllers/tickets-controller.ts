@@ -15,7 +15,7 @@ export async function getTicketsByUser(req: AuthenticatedRequest, res: Response)
     const ticketUser = await ticketsService.getAllTicketsFromUser(email);
     if (!ticketUser) return res.sendStatus(httpStatus.NOT_FOUND);
 
-    return res.status(httpStatus.OK).send(ticketUser);
+    return res.status(httpStatus.CREATED).send(ticketUser);
   } catch (e) {
     if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
   }
@@ -29,7 +29,7 @@ export async function postCreateTicket(req: AuthenticatedRequest, res: Response)
     const newTickets = await ticketsService.postNewTicket(ticketTypeId, userId);
     if (!newTickets) return res.sendStatus(httpStatus.BAD_REQUEST);
 
-    return res.status(httpStatus.OK).send(newTickets);
+    return res.status(httpStatus.CREATED).send(newTickets);
   } catch (e) {
     if (e.name === 'RequestError') return res.sendStatus(httpStatus.BAD_REQUEST);
     if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
