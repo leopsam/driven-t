@@ -17,11 +17,11 @@ async function getAllTicketsByType() {
   return ticketsTypes;
 }
 
-async function getAllTicketsFromUser(email: string) {
+async function getAllTicketsFromUser(email: string, userId: number) {
   const user = await ticketRepository.findUserByEmailFromTicket(email);
   if (!user) throw notFoundError();
 
-  const enrollment = await ticketRepository.findEnrollmentByIdFromTicket(user.id);
+  const enrollment = await ticketRepository.findEnrollmentByIdFromTicket(userId);
   if (!enrollment) throw notFoundError();
 
   const tickets = await ticketRepository.findManyTicketsFromUser(enrollment.id);
