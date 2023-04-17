@@ -17,8 +17,8 @@ export async function getTicketsByUser(req: AuthenticatedRequest, res: Response)
     if (ticketUser.length === 0) return res.send('The user has no tickets');
 
     return res.status(httpStatus.OK).send(ticketUser);
-  } catch {
-    return res.sendStatus(httpStatus.NOT_FOUND);
+  } catch (e) {
+    if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED);
   }
 }
 
