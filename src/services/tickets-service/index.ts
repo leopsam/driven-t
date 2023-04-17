@@ -22,15 +22,11 @@ async function getAllTicketsFromUser(email: string, userId: number) {
   //if (!user) throw notFoundError();
 
   const enrollment = await ticketRepository.findEnrollmentByIdFromTicket(userId);
-  console.log('teste 1');
   if (!enrollment) throw notFoundError();
 
   const tickets = await ticketRepository.findManyTicketsFromUser(enrollment.id);
-  console.log('teste 2');
   if (!tickets) throw notFoundError();
   if (tickets.length === 0) throw notFoundError();
-
-  console.log('teste 3');
 
   return tickets;
 }

@@ -16,10 +16,7 @@ export async function getTicketsByUser(req: AuthenticatedRequest, res: Response)
 
   try {
     const ticketUser = await ticketsService.getAllTicketsFromUser(email, userId);
-    console.log('teste 1 control');
     if (!ticketUser) return res.sendStatus(httpStatus.NOT_FOUND);
-
-    console.log('teste 2 control');
 
     return res.status(httpStatus.CREATED).send(ticketUser);
   } catch (e) {
