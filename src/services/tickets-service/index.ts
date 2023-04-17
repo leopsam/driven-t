@@ -50,12 +50,12 @@ async function postNewTicket(ticketTypeId: number, userId: number) {
     status: ticketCreated.status,
     ticketTypeId: ticketCreated.ticketTypeId,
     enrollmentId: ticketCreated.enrollmentId,
-    ticketType,
+    //ticketType,
     createdAt: ticketCreated.createdAt,
     updatedAt: ticketCreated.updatedAt,
   };
 
-  return responseNew;
+  return ticketCreated;
 }
 
 export type PostResultTichets = Omit<Ticket, 'id' | 'createdAt' | 'updatedAt'>;
