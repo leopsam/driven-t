@@ -11,7 +11,7 @@ async function getInfoPaymentByTicket(ticketId: number, userId: number) {
   if (!enrollment) throw unauthorizedError();
 
   const ticket = await paymentRepository.findTicketById(ticketId);
-  if (!ticket) throw notFoundError();
+  if (!ticket) throw unauthorizedError();
 
   const paymwent = await paymentRepository.findPaymentByTicketId(ticketId);
   if (!paymwent) throw unauthorizedError();
@@ -30,10 +30,10 @@ async function postPaymentFromTicket(paymentBody: {
   };
 }): Promise<Payment> {
   const ticket = await paymentRepository.findTicketById(paymentBody.ticketId);
-  if (!ticket) throw notFoundError();
+  if (!ticket) throw unauthorizedError();
 
   const ticketType = await ticketRepository.findTicketTypeById(ticket.ticketTypeId);
-  if (!ticketType) throw notFoundError();
+  if (!ticketType) throw unauthorizedError();
 
   const newPayment: PostResultPayment = {
     ticketId: paymentBody.ticketId,
