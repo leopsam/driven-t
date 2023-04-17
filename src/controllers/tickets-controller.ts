@@ -14,11 +14,10 @@ export async function getTicketsByUser(req: AuthenticatedRequest, res: Response)
   try {
     const ticketUser = await ticketsService.getAllTicketsFromUser(email);
     if (!ticketUser) return res.sendStatus(httpStatus.NOT_FOUND);
-    if (ticketUser.length === 0) return res.send('The user has no tickets');
 
     return res.status(httpStatus.OK).send(ticketUser);
   } catch (e) {
-    if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED);
+    if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
   }
 }
 

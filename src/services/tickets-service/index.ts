@@ -9,7 +9,7 @@ import { AddressEnrollment } from '@/protocols';
 */
 
 import { Ticket } from '@prisma/client';
-import { notFoundError, requestError, unauthorizedError } from '@/errors';
+import { notFoundError, requestError } from '@/errors';
 import ticketRepository from '@/repositories/ticket-repository';
 
 async function getAllTicketsByType() {
@@ -19,13 +19,14 @@ async function getAllTicketsByType() {
 
 async function getAllTicketsFromUser(email: string) {
   const user = await ticketRepository.findUserByEmailFromTicket(email);
-  if (!user) throw unauthorizedError();
+  if (!user) throw notFoundError();
 
   const enrollment = await ticketRepository.findEnrollmentByIdFromTicket(user.id);
-  if (!enrollment) throw unauthorizedError();
+  if (!enrollment) throw notFoundError();
 
   const tickets = await ticketRepository.findManyTicketsFromUser(enrollment.id);
-  if (!tickets) throw unauthorizedError();
+  if (!tickets) throw notFoundError();
+  if (tickets.length === 0) throw notFoundError();
 
   return tickets;
 }
