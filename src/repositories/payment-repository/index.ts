@@ -61,6 +61,19 @@ async function updateTicketStatus(id: number) {
   });
 }
 
+async function findPaymentFromUser(ticketId: number, userId: number) {
+  return prisma.payment.findFirst({
+    where: {
+      ticketId,
+      Ticket: {
+        Enrollment: {
+          userId,
+        },
+      },
+    },
+  });
+}
+
 const paymentRepository = {
   updateTicketStatus,
   findTicketFromToUser,
@@ -68,6 +81,7 @@ const paymentRepository = {
   findPaymentByTicketId,
   findEnrollmentByUserId,
   createPaymentFromTicket,
+  findPaymentFromUser,
 };
 
 export default paymentRepository;
