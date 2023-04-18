@@ -1,51 +1,49 @@
 import { Payment } from '@prisma/client';
-import { notFoundError, unauthorizedError } from '@/errors';
+import { invalidDataError, notFoundError, unauthorizedError } from '@/errors';
 import paymentRepository from '@/repositories/payment-repository';
 import ticketRepository from '@/repositories/ticket-repository';
+import { CardData } from '@/protocols';
 
 async function getInfoPaymentByTicket(ticketId: number, userId: number) {
-  const user = await ticketRepository.findUserByIdFromTicket(userId);
-  if (!user) throw unauthorizedError();
-
-  const enrollment = await paymentRepository.findEnrollmentByUserId(user.id);
-  if (!enrollment) throw unauthorizedError();
+  if (!ticketId) throw invalidDataError(['Ticket identifier not found, required']);
 
   const ticket = await paymentRepository.findTicketById(ticketId);
-  if (!ticket) throw unauthorizedError();
-
-  const paymwent = await paymentRepository.findPaymentByTicketId(ticketId);
-  if (!paymwent) throw unauthorizedError();
-
-  return paymwent;
-}
-
-async function postPaymentFromTicket(paymentBody: {
-  ticketId: number;
-  cardData: {
-    issuer: string;
-    number: number;
-    name: string;
-    expirationDate: Date;
-    cvv: number;
-  };
-}): Promise<Payment> {
-  const ticket = await paymentRepository.findTicketById(paymentBody.ticketId);
   if (!ticket) throw notFoundError();
 
-  const ticketType = await ticketRepository.findTicketTypeById(ticket.ticketTypeId);
-  if (!ticketType) throw notFoundError();
+  const ticketUser = await paymentRepository.findPaymentFromUser(ticket.id, userId);
+  if (!ticketUser) throw unauthorizedError();
 
-  const newPayment: PostResultPayment = {
-    ticketId: paymentBody.ticketId,
-    value: ticketType.price,
-    cardIssuer: paymentBody.cardData.issuer,
-    cardLastDigits: paymentBody.cardData.name,
-  };
+  const payment = await paymentRepository.findPaymentByTicketId(ticket.id);
+  if (!payment) throw notFoundError();
 
-  const response = await paymentRepository.createPaymentFromTicket(newPayment);
-
-  return response;
+  return payment;
 }
+
+async function postPaymentFromTicket(ticketId: number, userId: number, cardData: CardData) {
+  if (!cardData || !ticketId) throw invalidDataError(['Ticket id and card data are required']);
+
+  const ticket = await paymentRepository.findTicketById(ticketId);
+  if (!ticket) throw notFoundError();
+
+  const ticketFromToUser = await paymentRepository.findTicketFromToUser(ticketId, userId);
+  if (!ticketFromToUser) throw unauthorizedError();
+
+  await paymentRepository.updateTicketStatus(ticketId);
+
+  const cardIssuer = cardData.issuer;
+  const cardLastDigits = String(cardData.number).slice(-4);
+  const ticketType = await ticketRepository.findTicketTypeById(ticket.ticketTypeId);
+
+  const payment = await paymentRepository.createPaymentFromTicket(
+    ticket.id,
+    cardIssuer,
+    cardLastDigits,
+    Number(ticketType.price),
+  );
+
+  return payment;
+}
+
 export type PostResultPayment = Omit<Payment, 'id' | 'createdAt' | 'updatedAt'>;
 
 const paymentsService = {

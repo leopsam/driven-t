@@ -1,5 +1,4 @@
 import { prisma } from '@/config';
-import { PostResultPayment } from '@/services';
 
 async function findTicketById(id: number) {
   const data = await prisma.ticket.findFirst({
@@ -28,14 +27,43 @@ async function findEnrollmentByUserId(userId: number) {
   return data;
 }
 
-async function createPaymentFromTicket(payment: PostResultPayment) {
+async function createPaymentFromTicket(ticketId: number, cardIssuer: string, cardLastDigits: string, value: number) {
   const data = await prisma.payment.create({
-    data: payment,
+    data: {
+      ticketId,
+      cardIssuer,
+      cardLastDigits,
+      value,
+    },
   });
   return data;
 }
 
+async function findTicketFromToUser(id: number, userId: number) {
+  return prisma.ticket.findFirst({
+    where: {
+      id,
+      Enrollment: {
+        userId,
+      },
+    },
+  });
+}
+
+async function updateTicketStatus(id: number) {
+  return prisma.ticket.update({
+    where: {
+      id,
+    },
+    data: {
+      status: 'PAID',
+    },
+  });
+}
+
 const paymentRepository = {
+  updateTicketStatus,
+  findTicketFromToUser,
   findTicketById,
   findPaymentByTicketId,
   findEnrollmentByUserId,
