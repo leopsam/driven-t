@@ -33,7 +33,7 @@ async function findEnrollmentByIdFromTicket(userId: number) {
 }
 
 async function findManyTicketsFromUser(enrollmentId: number) {
-  const data = await prisma.ticket.findMany({
+  const data = await prisma.ticket.findFirst({
     where: {
       enrollmentId,
     },
@@ -56,6 +56,9 @@ async function findTicketTypeById(id: number) {
 async function createNewTicketFromUserAndType(ticket: PostResultTichets) {
   const data = await prisma.ticket.create({
     data: ticket,
+    include: {
+      TicketType: true,
+    },
   });
   return data;
 }

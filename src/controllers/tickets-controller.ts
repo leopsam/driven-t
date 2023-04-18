@@ -24,6 +24,7 @@ export async function getTicketsByUser(req: AuthenticatedRequest, res: Response)
 export async function postCreateTicket(req: AuthenticatedRequest, res: Response) {
   const { ticketTypeId } = req.body;
   const { userId } = req;
+  //const userId = 1288;
 
   try {
     const newTickets = await ticketsService.postNewTicket(ticketTypeId, userId);

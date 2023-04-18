@@ -22,7 +22,7 @@ async function getAllTicketsFromUser(userId: number) {
   if (!enrollment) throw notFoundError();
 
   const tickets = await ticketRepository.findManyTicketsFromUser(enrollment.id);
-  if (!tickets || tickets.length === 0) throw notFoundError();
+  if (!tickets) throw notFoundError();
 
   return tickets;
 }
