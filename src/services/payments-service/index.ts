@@ -5,7 +5,7 @@ import ticketRepository from '@/repositories/ticket-repository';
 import { CardData } from '@/protocols';
 
 async function getInfoPaymentByTicket(ticketId: number, userId: number) {
-  if (!ticketId) throw invalidDataError(['Ticket identifier not found, required']);
+  if (!ticketId) throw invalidDataError(['Ticket id is required']);
 
   const ticket = await paymentRepository.findTicketById(ticketId);
   if (!ticket) throw notFoundError();
