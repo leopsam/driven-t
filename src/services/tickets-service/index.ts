@@ -45,16 +45,6 @@ async function postNewTicket(ticketTypeId: number, userId: number) {
 
   const ticketCreated = await ticketRepository.createNewTicketFromUserAndType(dataNewTicket);
 
-  const responseNew = {
-    id: ticketCreated.id,
-    status: ticketCreated.status,
-    ticketTypeId: ticketCreated.ticketTypeId,
-    enrollmentId: ticketCreated.enrollmentId,
-    //ticketType,
-    createdAt: ticketCreated.createdAt,
-    updatedAt: ticketCreated.updatedAt,
-  };
-
   return ticketCreated;
 }
 

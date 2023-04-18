@@ -7,11 +7,9 @@ export async function getPaymentsByTicketId(req: AuthenticatedRequest, res: Resp
   const { ticketId } = req.params;
   const { userId } = req;
 
-  console.log(ticketId);
+  //console.log(ticketId);
 
-  if (ticketId === 'undefined' || ticketId === 'null' || ticketId === '0' || !ticketId) {
-    return res.sendStatus(httpStatus.BAD_REQUEST);
-  }
+  if (!ticketId) return res.sendStatus(httpStatus.BAD_REQUEST);
 
   try {
     const payment = await paymentsService.getInfoPaymentByTicket(Number(ticketId), userId);

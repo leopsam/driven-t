@@ -37,6 +37,9 @@ async function findManyTicketsFromUser(enrollmentId: number) {
     where: {
       enrollmentId,
     },
+    include: {
+      TicketType: true,
+    },
   });
   return data;
 }

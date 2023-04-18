@@ -1,5 +1,5 @@
 import { Payment } from '@prisma/client';
-import { notFoundError, unauthorizedError } from '@/errors';
+import { unauthorizedError } from '@/errors';
 import paymentRepository from '@/repositories/payment-repository';
 import ticketRepository from '@/repositories/ticket-repository';
 
