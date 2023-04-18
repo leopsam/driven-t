@@ -9,17 +9,17 @@ export async function getPaymentsByTicketId(req: AuthenticatedRequest, res: Resp
 
   //console.log(ticketId);
 
-  if (!ticketId) return res.sendStatus(httpStatus.BAD_REQUEST);
-
   try {
+    if (!ticketId) return res.sendStatus(httpStatus.BAD_REQUEST);
+
     const payment = await paymentsService.getInfoPaymentByTicket(Number(ticketId), userId);
     if (!payment) return res.sendStatus(httpStatus.BAD_REQUEST);
 
     return res.status(httpStatus.OK).send(payment);
   } catch (e) {
-    if (e.name === 'RequestError') return res.sendStatus(httpStatus.BAD_REQUEST);
-    if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
-    if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED);
+    if (e.name === 'RequestError') return res.sendStatus(httpStatus.BAD_REQUEST); //400
+    if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND); //404
+    if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED); //401
   }
 }
 

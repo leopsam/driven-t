@@ -1,5 +1,5 @@
 import { Payment } from '@prisma/client';
-import { unauthorizedError } from '@/errors';
+import { notFoundError, unauthorizedError } from '@/errors';
 import paymentRepository from '@/repositories/payment-repository';
 import ticketRepository from '@/repositories/ticket-repository';
 
@@ -30,10 +30,10 @@ async function postPaymentFromTicket(paymentBody: {
   };
 }): Promise<Payment> {
   const ticket = await paymentRepository.findTicketById(paymentBody.ticketId);
-  if (!ticket) throw unauthorizedError();
+  if (!ticket) throw notFoundError();
 
   const ticketType = await ticketRepository.findTicketTypeById(ticket.ticketTypeId);
-  if (!ticketType) throw unauthorizedError();
+  if (!ticketType) throw notFoundError();
 
   const newPayment: PostResultPayment = {
     ticketId: paymentBody.ticketId,
