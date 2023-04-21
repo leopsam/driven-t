@@ -28,8 +28,7 @@ async function findTicketTypeById(ticketTypeId: number) {
 }
 
 async function findAllHotels() {
-  const data = await prisma.hotel.findMany();
-  return data;
+  return prisma.hotel.findMany();
 }
 
 async function findEnrollmentByUserId(userId: number) {
