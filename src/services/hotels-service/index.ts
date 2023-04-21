@@ -1,7 +1,7 @@
 import { notFoundError, requestError } from '@/errors';
 import hotelRepository from '@/repositories/hotel-repository';
 
-async function getAllInfoHotels(hotelId: number, userId: number) {
+async function getAllInfoHotels(userId: number) {
   const enrollment = await hotelRepository.findEnrollmentByUserId(userId);
   if (!enrollment) throw notFoundError();
 
@@ -19,16 +19,7 @@ async function getAllInfoHotels(hotelId: number, userId: number) {
   if (!hotels) throw notFoundError();
   if (hotels.length === 0) throw notFoundError();
 
-  if (!hotelId) return hotels;
-
-  if (hotelId) {
-    const hotel = await hotelRepository.findHotelById(hotelId);
-    if (!hotel) throw notFoundError();
-
-    const roons = await hotelRepository.findRoonsByIdHotel(hotelId);
-
-    return roons;
-  }
+  return hotels;
 }
 
 async function getInfoHotelById(hotelId: number, userId: number) {
