@@ -41,8 +41,6 @@ async function postPaymentFromTicket(paymentsBody: BodyProcess, userId: number) 
     Number(ticketType.price),
   );
 
-  console.log(payment);
-
   return payment;
 }
 
