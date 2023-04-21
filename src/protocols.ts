@@ -28,10 +28,13 @@ export type RequestError = {
   message: string;
 };
 
-export type CardData = {
-  issuer: string;
-  number: number;
-  name: string;
-  expirationDate: Date;
-  cvv: number;
+export type BodyProcess = {
+  ticketId: number;
+  cardData: {
+    issuer: string;
+    number: string;
+    name: string;
+    expirationDate: string;
+    cvv: string;
+  };
 };

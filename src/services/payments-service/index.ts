@@ -2,7 +2,7 @@ import { Payment } from '@prisma/client';
 import { invalidDataError, notFoundError, unauthorizedError } from '@/errors';
 import paymentRepository from '@/repositories/payment-repository';
 import ticketRepository from '@/repositories/ticket-repository';
-import { CardData } from '@/protocols';
+import { BodyProcess } from '@/protocols';
 
 async function getInfoPaymentByTicket(ticketId: number, userId: number) {
   if (!ticketId) throw invalidDataError(['Ticket id is required']);
@@ -19,19 +19,19 @@ async function getInfoPaymentByTicket(ticketId: number, userId: number) {
   return payment;
 }
 
-async function postPaymentFromTicket(ticketId: number, userId: number, cardData: CardData) {
-  if (!cardData || !ticketId) throw invalidDataError(['Ticket id and card data are required']);
+async function postPaymentFromTicket(paymentsBody: BodyProcess, userId: number) {
+  if (!paymentsBody.cardData || !paymentsBody.ticketId) throw invalidDataError(['Ticket and cardData are required']);
 
-  const ticket = await paymentRepository.findTicketById(ticketId);
+  const ticket = await paymentRepository.findTicketById(paymentsBody.ticketId);
   if (!ticket) throw notFoundError();
 
-  const ticketFromToUser = await paymentRepository.findTicketFromToUser(ticketId, userId);
+  const ticketFromToUser = await paymentRepository.findTicketFromToUser(paymentsBody.ticketId, userId);
   if (!ticketFromToUser) throw unauthorizedError();
 
-  await paymentRepository.updateTicketStatus(ticketId);
+  await paymentRepository.updateTicketStatus(paymentsBody.ticketId);
 
-  const cardIssuer = cardData.issuer;
-  const cardLastDigits = String(cardData.number).slice(-4);
+  const cardIssuer = paymentsBody.cardData.issuer;
+  const cardLastDigits = String(paymentsBody.cardData.number).slice(-4);
   const ticketType = await ticketRepository.findTicketTypeById(ticket.ticketTypeId);
 
   const payment = await paymentRepository.createPaymentFromTicket(
@@ -40,6 +40,8 @@ async function postPaymentFromTicket(ticketId: number, userId: number, cardData:
     cardLastDigits,
     Number(ticketType.price),
   );
+
+  console.log(payment);
 
   return payment;
 }

@@ -1,9 +1,9 @@
 import { prisma } from '@/config';
 
-async function findTicketById(id: number) {
+async function findTicketById(ticketId: number) {
   const data = await prisma.ticket.findFirst({
     where: {
-      id,
+      id: ticketId,
     },
   });
   return data;
