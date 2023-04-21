@@ -8,30 +8,17 @@ export async function getInfoAllHotelsOrHotelById(req: AuthenticatedRequest, res
     const { hotelId } = req.query;
     const { userId } = req;
 
-    const hotel = await hotelsService.getAllInfoHotels(Number(userId));
-    if (!hotel) return res.sendStatus(httpStatus.BAD_REQUEST);
-
-    /*
     if (!hotelId) {
-      console.log('/hotels');
-      console.log(userId);
-      console.log(hotelId);
-      const payment = await hotelsService.getAllInfoHotels(Number(hotelId), Number(userId));
-      if (!payment) return res.sendStatus(httpStatus.BAD_REQUEST);
+      const hotels = await hotelsService.getAllInfoHotels(Number(userId));
+      if (!hotels) return res.sendStatus(httpStatus.BAD_REQUEST);
+      return res.status(httpStatus.OK).send(hotels);
     }
 
     if (hotelId) {
-      console.log('/hotels/:hotelsId');
-      console.log(userId);
-      console.log(hotelId);
-      const payment = await hotelsService.getAllInfoHotels(Number(hotelId), Number(userId));
-      if (!payment) return res.sendStatus(httpStatus.BAD_REQUEST);
+      const roons = await hotelsService.getInfoHotelById(Number(hotelId), Number(userId));
+      if (!roons) return res.sendStatus(httpStatus.BAD_REQUEST);
+      return res.status(httpStatus.OK).send(roons);
     }
-*/
-    //const payment = await hotelsService.getInfoPaymentByTicket(Number(ticketId), Number(userId));
-    //if (!payment) return res.sendStatus(httpStatus.BAD_REQUEST);
-
-    //return res.status(httpStatus.OK).send(userId);
   } catch (e) {
     if (e.name === 'NoContent') return res.sendStatus(httpStatus.NO_CONTENT);
     if (e.name === 'InvalidDataError') return res.status(httpStatus.BAD_REQUEST).send(e.message);

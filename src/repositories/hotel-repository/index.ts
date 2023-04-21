@@ -61,13 +61,10 @@ async function findHotelById(hotelId: number) {
   });
 }
 
-async function updateTicketStatus(id: number) {
-  return prisma.ticket.update({
+async function findRoonsByIdHotel(hotelId: number) {
+  return prisma.room.findMany({
     where: {
-      id,
-    },
-    data: {
-      status: 'PAID',
+      hotelId,
     },
   });
 }
@@ -86,7 +83,7 @@ async function findPaymentFromUser(ticketId: number, userId: number) {
 }
 
 const hotelRepository = {
-  updateTicketStatus,
+  findRoonsByIdHotel,
   findTicketByEnrollmentId,
   findHotelById,
   findPaymentByTicketId,
