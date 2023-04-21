@@ -8,17 +8,10 @@ export async function getInfoAllHotelsOrHotelById(req: AuthenticatedRequest, res
     const { hotelId } = req.query;
     const { userId } = req;
 
-    if (!hotelId) {
-      const hotels = await hotelsService.getAllInfoHotels(Number(userId));
-      if (!hotels) return res.sendStatus(httpStatus.BAD_REQUEST);
-      return res.status(httpStatus.OK).send(hotels);
-    }
+    const roons = await hotelsService.getAllInfoHotels(Number(hotelId), Number(userId));
+    if (!roons) return res.sendStatus(httpStatus.BAD_REQUEST);
 
-    if (hotelId) {
-      const roons = await hotelsService.getInfoHotelById(Number(hotelId), Number(userId));
-      if (!roons) return res.sendStatus(httpStatus.BAD_REQUEST);
-      return res.status(httpStatus.OK).send(roons);
-    }
+    return res.status(httpStatus.OK).send(roons);
   } catch (e) {
     if (e.name === 'NoContent') return res.sendStatus(httpStatus.NO_CONTENT);
     if (e.name === 'InvalidDataError') return res.status(httpStatus.BAD_REQUEST).send(e.message);
