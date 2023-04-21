@@ -28,6 +28,7 @@ export async function postPaymentsFromTicket(req: AuthenticatedRequest, res: Res
     const payment = await paymentsService.postPaymentFromTicket(Number(ticketId), Number(userId), cardData);
     return res.status(httpStatus.OK).send(payment);
   } catch (e) {
+    if (e.name === 'NoContent') return res.sendStatus(httpStatus.NO_CONTENT);
     if (e.name === 'InvalidDataError') return res.status(httpStatus.BAD_REQUEST).send(e.message);
     if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
     if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED);
