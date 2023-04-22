@@ -17,6 +17,7 @@ export async function getInfoAllHotels(req: AuthenticatedRequest, res: Response)
     if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
     if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED);
     if (e.name === 'RequestError') return res.sendStatus(httpStatus.PAYMENT_REQUIRED).send(e.statusText);
+    //return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message);
   }
 }
 
@@ -35,5 +36,6 @@ export async function getInfoHotelById(req: AuthenticatedRequest, res: Response)
     if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
     if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED);
     if (e.name === 'RequestError') return res.sendStatus(httpStatus.PAYMENT_REQUIRED).send(e.statusText);
+    //return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message);
   }
 }

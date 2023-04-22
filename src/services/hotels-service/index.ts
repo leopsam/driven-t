@@ -7,16 +7,13 @@ async function getAllInfoHotels(userId: number) {
 
   const ticket = await hotelRepository.findTicketByEnrollmentId(enrollment.id);
   if (!ticket) throw notFoundError();
-
-  if (ticket.status !== 'PAID') throw requestError(402, 'paid request');
+  if (ticket.status !== 'PAID') throw requestError(402, 'PAID request');
 
   const ticketType = await hotelRepository.findTicketTypeById(ticket.ticketTypeId);
-
-  if (ticketType.isRemote === true) throw requestError(402, 'paid request');
-  if (ticketType.includesHotel === false) throw requestError(402, 'paid request');
+  if (ticketType.isRemote === true) throw requestError(402, 'Ticket type is remote');
+  if (ticketType.includesHotel === false) throw requestError(402, 'Ticket type does not include hotel');
 
   const hotels = await hotelRepository.findAllHotels();
-  if (!hotels) throw notFoundError();
   if (hotels.length === 0) throw notFoundError();
 
   return hotels;
@@ -29,15 +26,15 @@ async function getInfoHotelById(hotelId: number, userId: number) {
   const ticket = await hotelRepository.findTicketByEnrollmentId(enrollment.id);
   if (!ticket) throw notFoundError();
 
-  const hotel = await hotelRepository.findHotelById(hotelId);
-  if (!hotel) throw notFoundError();
-
-  if (ticket.status !== 'PAID') throw requestError(402, 'paid request');
+  if (ticket.status !== 'PAID') throw requestError(402, 'PAID request');
 
   const ticketType = await hotelRepository.findTicketTypeById(ticket.ticketTypeId);
 
-  if (ticketType.isRemote === true) throw requestError(402, 'paid request');
-  if (ticketType.includesHotel === false) throw requestError(402, 'paid request');
+  if (ticketType.isRemote === true) throw requestError(402, 'Ticket type is remote');
+  if (ticketType.includesHotel === false) throw requestError(402, 'Ticket type does not include hotel');
+
+  const hotel = await hotelRepository.findHotelById(hotelId);
+  if (!hotel) throw notFoundError();
 
   const hotelRoons = await hotelRepository.findRoonsByIdHotel(hotelId);
 
