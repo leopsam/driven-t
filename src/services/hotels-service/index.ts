@@ -39,9 +39,9 @@ async function getInfoHotelById(hotelId: number, userId: number) {
   if (ticketType.isRemote === true) throw requestError(402, 'paid request');
   if (ticketType.includesHotel === false) throw requestError(402, 'paid request');
 
-  const roons = await hotelRepository.findRoonsByIdHotel(hotelId);
+  const hotelRoons = await hotelRepository.findRoonsByIdHotel(hotelId);
 
-  return roons;
+  return hotelRoons;
 }
 
 const hotelsService = {
