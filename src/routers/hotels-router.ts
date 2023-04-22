@@ -4,10 +4,6 @@ import { getInfoAllHotels, getInfoHotelById } from '@/controllers/hotels-control
 
 const hotelsRouter = Router();
 
-// eslint-disable-next-line prettier/prettier
-hotelsRouter
-  .all('/*', authenticateToken)
-  .get('/', getInfoAllHotels)
-  .get('/:hotelId', getInfoHotelById);
+hotelsRouter.all('/*', authenticateToken).get('/', getInfoAllHotels).get('/:hotelId', getInfoHotelById);
 
 export { hotelsRouter };
