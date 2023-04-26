@@ -229,7 +229,7 @@ describe('GET /hotels/:hotelId', () => {
       await createTicket(enrollment.id, ticketType.id, TicketStatus.PAID);
       const hotel = await createHotelAndRooms();
 
-      const response = await api.get(`/hotels/${hotel.id}`).set('Authorization', `Bearer ${token}`);
+      const response = await api.get(`/hotels/${hotel.hotel.id}`).set('Authorization', `Bearer ${token}`);
 
       expect(response.body).toEqual(
         expect.objectContaining({

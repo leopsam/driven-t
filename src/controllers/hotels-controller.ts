@@ -8,7 +8,6 @@ export async function getInfoAllHotels(req: AuthenticatedRequest, res: Response)
     const { userId } = req;
 
     const roons = await hotelsService.getAllInfoHotels(Number(userId));
-    if (!roons) return res.sendStatus(httpStatus.BAD_REQUEST);
 
     return res.status(httpStatus.OK).send(roons);
   } catch (e) {
@@ -17,7 +16,6 @@ export async function getInfoAllHotels(req: AuthenticatedRequest, res: Response)
     if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
     if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED);
     if (e.name === 'RequestError') return res.sendStatus(httpStatus.PAYMENT_REQUIRED).send(e.statusText);
-    //return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message);
   }
 }
 
@@ -27,7 +25,6 @@ export async function getInfoHotelById(req: AuthenticatedRequest, res: Response)
     const { userId } = req;
 
     const roons = await hotelsService.getInfoHotelById(Number(hotelId), Number(userId));
-    if (!roons) return res.sendStatus(httpStatus.BAD_REQUEST);
 
     return res.status(httpStatus.OK).send(roons);
   } catch (e) {
@@ -36,6 +33,5 @@ export async function getInfoHotelById(req: AuthenticatedRequest, res: Response)
     if (e.name === 'NotFoundError') return res.sendStatus(httpStatus.NOT_FOUND);
     if (e.name === 'UnauthorizedError') return res.sendStatus(httpStatus.UNAUTHORIZED);
     if (e.name === 'RequestError') return res.sendStatus(httpStatus.PAYMENT_REQUIRED).send(e.statusText);
-    //return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message);
   }
 }
