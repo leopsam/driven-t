@@ -28,7 +28,7 @@ async function postNewBooking(roomId: number, userId: number) {
 
   const booking = await bookingRepository.createBookingByRoomId(userId, roomId);
 
-  return booking;
+  return { bookingId: booking.id };
 }
 
 async function putBookingById(bookingId: number, userId: number, roomId: number) {
@@ -41,7 +41,7 @@ async function putBookingById(bookingId: number, userId: number, roomId: number)
 
   const booking = await bookingRepository.updateBookingFromUserByRoomId(bookingUser.id, roomId);
 
-  return booking;
+  return { bookingId: booking.id };
 }
 
 const hotelsService = {

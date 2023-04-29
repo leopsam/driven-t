@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.17% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/39</span>
+                <span class='fraction'>39/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -116,35 +116,35 @@
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -169,7 +169,7 @@ async function getAllInfoHotels(userId: number) {
   if (!enrollment) throw notFoundError();
 &nbsp;
   const ticket = await hotelRepository.findTicketByEnrollmentId(enrollment.id);
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!ticket) <span class="cstat-no" title="statement not covered" >throw notFoundError();</span>
+  if (!ticket) throw notFoundError();
   if (ticket.status !== 'PAID') throw requestError(402, 'PAID request');
 &nbsp;
   const ticketType = await hotelRepository.findTicketTypeById(ticket.ticketTypeId);
@@ -177,23 +177,23 @@ async function getAllInfoHotels(userId: number) {
   if (ticketType.includesHotel === false) throw requestError(402, 'Ticket type does not include hotel');
 &nbsp;
   const hotels = await hotelRepository.findAllHotels();
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (hotels.length === 0) <span class="cstat-no" title="statement not covered" >throw notFoundError();</span>
+  if (hotels.length === 0) throw notFoundError();
 &nbsp;
   return hotels;
 }
 &nbsp;
 async function getInfoHotelById(hotelId: number, userId: number) {
   const enrollment = await hotelRepository.findEnrollmentByUserId(userId);
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!enrollment) <span class="cstat-no" title="statement not covered" >throw notFoundError();</span>
+  if (!enrollment) throw notFoundError();
 &nbsp;
   const ticket = await hotelRepository.findTicketByEnrollmentId(enrollment.id);
   if (!ticket) throw notFoundError();
 &nbsp;
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (ticket.status !== 'PAID') <span class="cstat-no" title="statement not covered" >throw requestError(402, 'PAID request');</span>
+  if (ticket.status !== 'PAID') throw requestError(402, 'PAID request');
 &nbsp;
   const ticketType = await hotelRepository.findTicketTypeById(ticket.ticketTypeId);
 &nbsp;
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (ticketType.isRemote === true) <span class="cstat-no" title="statement not covered" >throw requestError(402, 'Ticket type is remote');</span>
+  if (ticketType.isRemote === true) throw requestError(402, 'Ticket type is remote');
   if (ticketType.includesHotel === false) throw requestError(402, 'Ticket type does not include hotel');
 &nbsp;
   const hotel = await hotelRepository.findHotelById(hotelId);
@@ -217,7 +217,7 @@ export default hotelsService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at Tue Apr 25 2023 21:05:42 GMT-0300 (Horário Padrão de Brasília)
+                at Sat Apr 29 2023 13:55:43 GMT-0300 (Horário Padrão de Brasília)
             </div>
         <script src="../../../prettify.js"></script>
         <script>
