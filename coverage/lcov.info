@@ -120,7 +120,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:src/controllers/bookings-controller.ts
+SF:src/controllers/booking-controller.ts
 FN:6,getInfoBooking
 FN:16,postBooking
 FN:30,putBookingById
@@ -141,7 +141,6 @@ DA:17,6
 DA:18,6
 DA:20,6
 DA:21,6
-DA:22,1
 DA:23,1
 DA:25,5
 DA:26,4
@@ -151,12 +150,11 @@ DA:32,4
 DA:33,4
 DA:34,4
 DA:36,4
-DA:37,1
 DA:38,1
 DA:40,3
 DA:41,2
-LF:26
-LH:26
+LF:24
+LH:24
 BRDA:12,0,0,1
 BRDA:25,1,0,1
 BRDA:26,2,0,4
@@ -1164,7 +1162,7 @@ BRF:2
 BRH:2
 end_of_record
 TN:
-SF:src/services/bookings-service/index.ts
+SF:src/services/booking-service/index.ts
 FN:4,getInfoBooking
 FN:16,postNewBooking
 FN:34,putBookingById

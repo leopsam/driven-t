@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticateToken } from '@/middlewares';
-import { getInfoBooking, postBooking, putBookingById } from '@/controllers/bookings-controller'; //trocar
+import { getInfoBooking, postBooking, putBookingById } from '@/controllers/booking-controller'; //trocar
 
 const bookingsRouter = Router();
 
